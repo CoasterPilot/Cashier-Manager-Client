@@ -1,0 +1,5 @@
+[EN]
+button_open_edit_window = Change Value Window
+
+[DE]
+button_open_edit_window = Wert ändern
