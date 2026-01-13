@@ -26,5 +26,6 @@ logs/
 
 #Datenbanken
 *.db
-#Server Files
-Plex_Datenbank_Server/
+#config
+config.txt
+

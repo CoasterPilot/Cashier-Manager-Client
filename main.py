@@ -4,21 +4,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QPushButton
 )
-
-
-def read_config_value(filename, key):
-    with open(filename, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-
-            # leere Zeilen oder Kommentare überspringen
-            if not line or line.startswith("#"):
-                continue
-
-            if line.startswith(key + "="):
-                return line.split("=", 1)[1].strip()
-
-    return None
+from functions import *
 
 
 def load_language_config(filename, language):
@@ -49,7 +35,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         # Show 
-        text_config = load_language_config("sample_text_translate.txt", language)
+        global text_config
+        text_config = load_language_config("text_translate.txt", language)
         self.button_edit_balance_text = text_config.get("button_open_edit_window", "Error Name for Pay Page")
         self.button_edit_balance = QPushButton(self.button_edit_balance_text)
         self.button_edit_balance.clicked.connect(self.show_edit_balanced_window)
