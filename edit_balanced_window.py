@@ -11,6 +11,11 @@ import sys
 from main import load_language_config
 from api import get_accounts
 
+global text_config
+# Debugging delete After Usage
+language = "EN"
+text_config = load_language_config("text_translate.txt", language)
+
 class edit_balanced_window(QDialog):
 
     def __init__(self):
@@ -27,19 +32,30 @@ class edit_balanced_window(QDialog):
         self.label = QLabel("Edit Balanced Window")
         layout.addWidget(self.label)
 
+        # Abfrage wie viele Konten vorhanden sind und diese in Tabelle anzeigen
+        num_accounts = len(self.api_accounts)
+
         self.table = QTableWidget()
         self.table.setColumnCount(3)
-        self.table.setRowCount(5)
+        self.table.setRowCount(num_accounts)
         # Languages
         self.name_current_account_Balance_text = text_config.get("current_account_balance", "Error Name for Current Account Balance")
         self.update_current_account_button_text = text_config.get("update_current_account_button", "Error Name for Update Current Account Button")
 
         self.table.setHorizontalHeaderLabels(["Name", self.name_current_account_Balance_text, self.update_current_account_button_text])
-        self.table.setItem(0, 0, QTableWidgetItem("Beispiel Name 1"))
-        self.table.setItem(0, 1, QTableWidgetItem("1000"))
-        update_button = QPushButton(self.update_current_account_button_text)
+        #Setze Name für Benutuzer und Kontostand aus API Request
+        
+        for i in range(len(self.api_accounts)):
+            #Benutzer
+            benutzername = self.api_accounts[i][0]
+            self.table.setItem(i, 0, QTableWidgetItem(benutzername))
+            #Kontostand abfragen
+            kontostand = self.api_accounts[i][1]
+            self.table.setItem(i, 1, QTableWidgetItem(str(kontostand)))
+            update_button = QPushButton(self.update_current_account_button_text)
+            update_button.clicked.connect(lambda checked, index=benutzername: pass)  # Hier kannst du die Funktion zum Aktualisieren des Kontostands hinzufügen
         self.table.setCellWidget(0, 2, update_button)
-        self.table.setVerticalHeaderLabels([str(i+1) for i in range(5)])
+        self.table.setVerticalHeaderLabels([str(i+1) for i in range(num_accounts)])
         layout.addWidget(self.table)
 
 
@@ -47,10 +63,6 @@ class edit_balanced_window(QDialog):
 
 
 if __name__ == '__main__':
-    global text_config
-    # Debugging delete After Usage
-    language = "EN"
-    text_config = load_language_config("text_translate.txt", language)
     app = QApplication(sys.argv)
     window = edit_balanced_window()
     window.show()
