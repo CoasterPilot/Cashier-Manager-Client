@@ -61,8 +61,8 @@ class edit_balanced_window(QDialog):
             kontostand = self.api_accounts[i][1]
             self.table.setItem(i, 1, QTableWidgetItem(str(kontostand)))
             update_button = QPushButton(self.update_current_account_button_text)
-            update_button.clicked.connect(lambda checked, index=benutzername: print("placeholder"))  # Hier kannst du die Funktion zum Aktualisieren des Kontostands hinzufügen
-        self.table.setCellWidget(0, 2, update_button)
+            update_button.clicked.connect(lambda checked, name=benutzername, buttonnumber=i: print(f"Benutzername: {name}. Number: {buttonnumber}"))  # Hier kannst du die Funktion zum Aktualisieren des Kontostands hinzufügen
+            self.table.setCellWidget(i, 2, update_button)
         self.table.setVerticalHeaderLabels([str(i+1) for i in range(num_accounts)])
         layout.addWidget(self.table)
 
