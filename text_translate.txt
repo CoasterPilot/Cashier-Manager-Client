@@ -1,6 +1,18 @@
 [EN]
 button_open_edit_window = Change Value Window
+current_account_balance = Current Account Balance
+change_account_balance_window_title = Payment for
+text_how_much_do_you_want_to_pay = How much do you want to pay?
+reason_for_paying_text = Reason for Paying? (Optional)
+pay_button_text = Pay
+close_button_text = Close
 
 [DE]
 button_open_edit_window = Wert ändern
 current_account_balance = Aktueller Kontostand
+change_account_balance_window_title = Bezahlvorgang für
+text_how_much_do_you_want_to_pay = Wie viel möchtest du bezahlen?
+reason_for_paying_text = Grund für Bezahlen? (Optional)
+pay_button_text = Bezahlen
+close_button_text = Schließen
+
