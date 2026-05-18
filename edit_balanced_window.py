@@ -27,7 +27,7 @@ class edit_balanced_window(QDialog):
         self.api_accounts = self.api_request.get("accounts", [])
         standard_window_height = 100
         # Multiplikator Pro Nutzer
-        user_height = 30
+        user_height = 35
         windowrange = 0
         for number in range(len(self.api_accounts)):
             windowrange += user_height
@@ -66,12 +66,25 @@ class edit_balanced_window(QDialog):
             self.table.setCellWidget(i, 2, update_button)
         self.table.setVerticalHeaderLabels([str(i+1) for i in range(num_accounts)])
         layout.addWidget(self.table)
+        self.reload_window_button = QPushButton("Reload Window")
+        self.reload_window_button.clicked.connect(self.reload_window)
+        layout.addWidget(self.reload_window_button)
+        self.close_button_text = text_config.get("close_button_text", "Error Name for Close Button")
+        self.close_button = QPushButton(self.close_button_text)
+        self.close_button.clicked.connect(self.close)
+        layout.addWidget(self.close_button)
+
     def open_change_balance_window(self, userid):
         from change_account_balance_window import change_account_balance_window
         self.change_balance_window = change_account_balance_window(userid)
-        self.change_balance_window.show()
+        self.change_balance_window.exec()
+        self.reload_window()
 
+    def reload_window(self):
+        self.close()
 
+        self.new_window = edit_balanced_window()
+        self.new_window.show()
 
 
 

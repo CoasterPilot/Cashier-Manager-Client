@@ -1,4 +1,5 @@
 import sys
+from wsgiref.validate import validator
 from PySide6.QtWidgets import (
     QDialog,
     QApplication,
@@ -8,6 +9,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout
 )
 from main import load_language_config
+from PySide6.QtGui import QIntValidator
 
 
 class change_account_balance_window(QDialog):
@@ -59,8 +61,10 @@ class change_account_balance_window(QDialog):
         
 
         # Pay Field
-
+    
         pay_field = QLineEdit()
+        validator = QIntValidator()
+        pay_field.setValidator(validator)
         pay_field.setFixedWidth(200) 
         pay_field.setParent(self)
         layout.addWidget(pay_field)
@@ -74,6 +78,7 @@ class change_account_balance_window(QDialog):
         layout.addWidget(self.label_reason_for_paying)
 
         # Reason for Paying Field
+        
         reason_for_paying_field = QLineEdit()
         reason_for_paying_field.setFixedWidth(200)
         reason_for_paying_field.setParent(self)
@@ -104,10 +109,29 @@ class change_account_balance_window(QDialog):
     def pay_over_api(self, account_id, value, reason, username_creator):
         print("Pay Button Clicked. user_id: " + str(account_id) + "Value: " + value + " Reason: " + reason)
         from api import update_balance
-        
-        response = update_balance(account_id, value, reason, username_creator)
-        print(response)
+        try:
+            response = update_balance(account_id, value, reason, username_creator)
+            confirmation_window_window = confirmation_window(response.get("message", "Balance updated successfully."), response.get("details", "Balance updated successfully."))
+            confirmation_window_window.exec()
+            print(response)
+            self.close()
+        except Exception as e:
+            print(f"An error occurred while updating the balance: {e}")
+            confirmation_window_window = confirmation_window("An error occurred while updating the balance.", "Your balance could not be updated. Please Check your input.")
+            confirmation_window_window.exec()
+            self.close()
 
+class confirmation_window(QDialog):
+    def __init__(self, title, message):
+        super().__init__()
+        self.setWindowTitle(title)
+        layout = QVBoxLayout()
+        self.label = QLabel(message)
+        layout.addWidget(self.label)
+        self.ok_button = QPushButton("OK")
+        self.ok_button.clicked.connect(self.accept)
+        layout.addWidget(self.ok_button)
+        self.setLayout(layout)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
