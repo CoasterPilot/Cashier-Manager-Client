@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QLabel,
     QApplication,
+    QPushButton
 )
 import sys
 
@@ -41,6 +42,7 @@ class new_food_window(QDialog):
         self.layout.addStretch()
 
         self.created_elements_list = []
+        self.created_name_fields_elements_list = []
 
     # Generate GUI for Amount of Invoice
     def generate_gui(self, text):
@@ -52,16 +54,80 @@ class new_food_window(QDialog):
 
         self.created_elements_list = []
 
-        # new elements only in the content layout
+        # Generate Invoice Elements
         for number in range(int(text)):
             label = QLabel(f"Invoice {number + 1}")
             text_box = QLineEdit()
+            who_payd_the_invoice_label = QLabel("Who pay the Invoice?")
+            who_payd_the_invoice_text_box = QComboBox()
+            #Change it to Users Via API Request
+            who_payd_the_invoice_text_box.addItem("User 1")
 
             self.created_elements_list.append(label)
             self.created_elements_list.append(text_box)
+            self.created_elements_list.append(who_payd_the_invoice_label)
+            self.created_elements_list.append(who_payd_the_invoice_text_box)
 
             self.content_layout.addWidget(label)
             self.content_layout.addWidget(text_box)
+            self.content_layout.addWidget(who_payd_the_invoice_label)
+            self.content_layout.addWidget(who_payd_the_invoice_text_box)
+
+
+
+        # add Name of the Food
+        if text != "0":
+            name_of_food_label = QLabel("Name of the Food")
+            name_of_food_text_box = QLineEdit()
+            Number_of_eating_people_label = QLabel("Number of Eating People")
+            self.Number_of_eating_people_combobox = QComboBox()
+            for i in range(10):
+                self.Number_of_eating_people_combobox.addItem(str(i))
+                self.created_elements_list.append(self.Number_of_eating_people_combobox)
+            self.created_elements_list.append(Number_of_eating_people_label)
+            self.created_elements_list.append(name_of_food_label)
+            self.created_elements_list.append(name_of_food_text_box)
+            self.content_layout.addWidget(name_of_food_label)
+            self.content_layout.addWidget(name_of_food_text_box)
+            self.Number_of_eating_people_combobox.currentTextChanged.connect(self.create_name_fields)
+            self.content_layout.addWidget(Number_of_eating_people_label)
+            self.content_layout.addWidget(self.Number_of_eating_people_combobox)
+
+        else:
+            pass
+        
+
+    def create_name_fields(self, number_of_people):
+        print("Number of People:", number_of_people)
+        for element in self.created_name_fields_elements_list:
+            element.deleteLater()
+        self.created_name_fields_elements_list.clear()
+        for number in range(int(number_of_people)):
+            name_of_eating_person_label = QLabel(f"Name of the Eating Person {number + 1}")
+            name_of_eating_person_text_box = QComboBox()
+            name_of_eating_person_text_box.addItem("User 1")
+            self.created_name_fields_elements_list.append(name_of_eating_person_label)
+            self.created_name_fields_elements_list.append(name_of_eating_person_text_box)
+            self.content_layout.addWidget(name_of_eating_person_label)
+            self.content_layout.addWidget(name_of_eating_person_text_box)
+        
+        # add calculate button
+
+        if number_of_people != "0":
+            calculate_button = QPushButton("Calculate")
+            calculate_button.clicked.connect(self.calculate_price)
+            self.created_name_fields_elements_list.append(calculate_button)
+            self.content_layout.addWidget(calculate_button)
+        else:
+            pass
+
+    def calculate_price(self):
+        print("Calculate Price")
+
+        
+     
+
+
 
 
 if __name__ == '__main__':
