@@ -41,27 +41,44 @@ class new_food_window(QDialog):
 
         self.layout.addStretch()
 
+        # Create Lists
         self.created_elements_list = []
         self.created_name_fields_elements_list = []
+        self.invoice_fields = []
 
     # Generate GUI for Amount of Invoice
     def generate_gui(self, text):
         print("You picked:", text)
+        self.invoice_fields.clear()
 
         # delete old elements
         for element in self.created_elements_list:
             element.deleteLater()
+        self.created_elements_list.clear()
+        for element in self.created_name_fields_elements_list:
+            element.deleteLater()
+        self.created_name_fields_elements_list.clear()
 
-        self.created_elements_list = []
+
+        self.created_elements_list.clear()
 
         # Generate Invoice Elements
         for number in range(int(text)):
             label = QLabel(f"Invoice {number + 1}")
             text_box = QLineEdit()
             who_payd_the_invoice_label = QLabel("Who pay the Invoice?")
+        
             who_payd_the_invoice_text_box = QComboBox()
             #Change it to Users Via API Request
             who_payd_the_invoice_text_box.addItem("User 1")
+
+            # SAFE Invoice with Name
+            invoice = {
+                "price": text_box,
+                "paid_by": who_payd_the_invoice_text_box
+            }
+            self.invoice_fields.append(invoice)
+
 
             self.created_elements_list.append(label)
             self.created_elements_list.append(text_box)
@@ -83,7 +100,7 @@ class new_food_window(QDialog):
             self.Number_of_eating_people_combobox = QComboBox()
             for i in range(10):
                 self.Number_of_eating_people_combobox.addItem(str(i))
-                self.created_elements_list.append(self.Number_of_eating_people_combobox)
+            self.created_elements_list.append(self.Number_of_eating_people_combobox)
             self.created_elements_list.append(Number_of_eating_people_label)
             self.created_elements_list.append(name_of_food_label)
             self.created_elements_list.append(name_of_food_text_box)
@@ -122,7 +139,20 @@ class new_food_window(QDialog):
             pass
 
     def calculate_price(self):
-        print("Calculate Price")
+        print("Calculate Price Button Clicked")
+        # Api Request to Calculate Price
+        # Get all the Data from the Fields and send it to the API
+        for index, invoice in enumerate(self.invoice_fields):
+            price = invoice["price"].text()
+            person = invoice["paid_by"].currentText()
+
+            print(
+                f"Invoice {index+1}:",
+                "Preis:", price,
+                "Bezahlt von:", person
+            )
+        
+
 
         
      
