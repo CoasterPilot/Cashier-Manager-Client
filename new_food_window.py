@@ -9,7 +9,11 @@ from PySide6.QtWidgets import (
 )
 import sys
 from functions import get_users
+from PySide6.QtGui import QRegularExpressionValidator
+from PySide6.QtCore import QRegularExpression
+from functions import Text_Only_Float_Validator
 
+float_validator = Text_Only_Float_Validator()
 
 class new_food_window(QDialog):
 
@@ -69,6 +73,7 @@ class new_food_window(QDialog):
         for number in range(int(text)):
             label = QLabel(f"Invoice {number + 1}")
             text_box = QLineEdit()
+            text_box.setValidator(float_validator)
             who_payd_the_invoice_label = QLabel("Who pay the Invoice?")
         
             who_payd_the_invoice_text_box = QComboBox()

@@ -21,3 +21,16 @@ def get_users():
         print(user)
     print(f"User List: {user_list}")
     return user_list
+
+def Text_Only_Float_Validator():
+    # Text only Float
+    try:
+        from PySide6.QtGui import QRegularExpressionValidator
+        from PySide6.QtCore import QRegularExpression
+        regex = QRegularExpression(r"^\d+([.,]\d+)?$")
+        validator = QRegularExpressionValidator(regex)
+        return validator
+    except Exception as e:
+        print(f"An error occurred while creating the validator: {e}")
+        validator = None
+    
