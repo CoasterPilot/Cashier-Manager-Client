@@ -11,3 +11,13 @@ def read_config_value(filename, key):
                 return line.split("=", 1)[1].strip()
 
     return None
+
+def get_users():
+    from api import get_accounts
+    user_list = []
+    accounts = get_accounts()
+    for user in accounts["accounts"]:
+        user_list.append(user[0])
+        print(user)
+    print(f"User List: {user_list}")
+    return user_list

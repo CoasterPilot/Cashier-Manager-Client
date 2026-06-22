@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QPushButton
 )
 import sys
+from functions import get_users
 
 
 class new_food_window(QDialog):
@@ -46,6 +47,8 @@ class new_food_window(QDialog):
         self.created_name_fields_elements_list = []
         self.invoice_fields = []
 
+        self.user_list = get_users()
+
     # Generate GUI for Amount of Invoice
     def generate_gui(self, text):
         print("You picked:", text)
@@ -70,7 +73,8 @@ class new_food_window(QDialog):
         
             who_payd_the_invoice_text_box = QComboBox()
             #Change it to Users Via API Request
-            who_payd_the_invoice_text_box.addItem("User 1")
+            for user in self.user_list:
+                who_payd_the_invoice_text_box.addItem(user)
 
             # SAFE Invoice with Name
             invoice = {
@@ -122,7 +126,8 @@ class new_food_window(QDialog):
         for number in range(int(number_of_people)):
             name_of_eating_person_label = QLabel(f"Name of the Eating Person {number + 1}")
             name_of_eating_person_text_box = QComboBox()
-            name_of_eating_person_text_box.addItem("User 1")
+            for user in self.user_list:
+                name_of_eating_person_text_box.addItem(user)
             self.created_name_fields_elements_list.append(name_of_eating_person_label)
             self.created_name_fields_elements_list.append(name_of_eating_person_text_box)
             self.content_layout.addWidget(name_of_eating_person_label)
@@ -145,13 +150,16 @@ class new_food_window(QDialog):
         for index, invoice in enumerate(self.invoice_fields):
             price = invoice["price"].text()
             person = invoice["paid_by"].currentText()
+            if price and person:
+                print(
+                    f"Invoice {index+1}:",
+                    "Preis:", price,
+                    "Bezahlt von:", person
+                )
+            else:
+                print(f"Invoice {index+1} is missing price or person information.")
+                return  # Stop calculation if any invoice is incomplete
 
-            print(
-                f"Invoice {index+1}:",
-                "Preis:", price,
-                "Bezahlt von:", person
-            )
-        
 
 
         
