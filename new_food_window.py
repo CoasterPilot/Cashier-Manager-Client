@@ -104,7 +104,7 @@ class new_food_window(QDialog):
         # add Name of the Food
         if text != "0":
             name_of_food_label = QLabel("Name of the Food")
-            name_of_food_text_box = QLineEdit()
+            self.name_of_food_text_box = QLineEdit()
             Number_of_eating_people_label = QLabel("Number of Eating People")
             self.Number_of_eating_people_combobox = QComboBox()
             for i in range(10):
@@ -112,9 +112,9 @@ class new_food_window(QDialog):
             self.created_elements_list.append(self.Number_of_eating_people_combobox)
             self.created_elements_list.append(Number_of_eating_people_label)
             self.created_elements_list.append(name_of_food_label)
-            self.created_elements_list.append(name_of_food_text_box)
+            self.created_elements_list.append(self.name_of_food_text_box)
             self.content_layout.addWidget(name_of_food_label)
-            self.content_layout.addWidget(name_of_food_text_box)
+            self.content_layout.addWidget(self.name_of_food_text_box)
             self.Number_of_eating_people_combobox.currentTextChanged.connect(self.create_name_fields)
             self.content_layout.addWidget(Number_of_eating_people_label)
             self.content_layout.addWidget(self.Number_of_eating_people_combobox)
@@ -125,6 +125,7 @@ class new_food_window(QDialog):
 
     def create_name_fields(self, number_of_people):
         print("Number of People:", number_of_people)
+        self.eating_people_name_fields = []
         for element in self.created_name_fields_elements_list:
             element.deleteLater()
         self.created_name_fields_elements_list.clear()
@@ -137,6 +138,7 @@ class new_food_window(QDialog):
             self.created_name_fields_elements_list.append(name_of_eating_person_text_box)
             self.content_layout.addWidget(name_of_eating_person_label)
             self.content_layout.addWidget(name_of_eating_person_text_box)
+            self.eating_people_name_fields.append(name_of_eating_person_text_box)
         
         # add calculate button
 
@@ -149,10 +151,15 @@ class new_food_window(QDialog):
             pass
 
     def calculate_price(self):
+        pay_list = []
+        food_name = self.name_of_food_text_box.text()
+        all_invoice_prices_list = []
         print("Calculate Price Button Clicked")
         # Api Request to Calculate Price
         # Get all the Data from the Fields and send it to the API
+        #First get the Price and the Person who payd the Invoice
         for index, invoice in enumerate(self.invoice_fields):
+            temp_name_pay_amount_list = {}
             price = invoice["price"].text()
             person = invoice["paid_by"].currentText()
             if price and person:
@@ -161,15 +168,35 @@ class new_food_window(QDialog):
                     "Preis:", price,
                     "Bezahlt von:", person
                 )
+                #Calculate Negfative Price for API Request
+                negative_price = -abs(float(price))
+                temp_name_pay_amount_list["price"] = negative_price
+                temp_name_pay_amount_list["paid_by"] = person
+                pay_list.append(temp_name_pay_amount_list)
+                all_invoice_prices_list.append(float(price))
+                print("Pay List:", pay_list)
+        # Price Per Person Calculation
             else:
                 print(f"Invoice {index+1} is missing price or person information.")
                 return  # Stop calculation if any invoice is incomplete
+        price_per_person = sum(all_invoice_prices_list) / len(self.eating_people_name_fields)
+        print("Price Per Person:", price_per_person)
+
+        for index, names in enumerate(self.eating_people_name_fields):
+            if names.currentText():
+                temp_name_pay_amount_list = {}
+                person_name = self.eating_people_name_fields[index].currentText()
+                temp_name_pay_amount_list["price"] = price_per_person
+                temp_name_pay_amount_list["paid_by"] = person_name
+                pay_list.append(temp_name_pay_amount_list)
+
+            else:
+                print(f"Name of Eating Person {index+1} is missing.")
+                return  # Stop calculation if any name is missing
 
 
-
-        
      
-
+        print("test")
 
 
 
