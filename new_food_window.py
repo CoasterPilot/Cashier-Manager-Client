@@ -12,6 +12,7 @@ from functions import get_users
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtCore import QRegularExpression
 from functions import Text_Only_Float_Validator
+from api import add_new_food
 
 float_validator = Text_Only_Float_Validator()
 
@@ -169,7 +170,7 @@ class new_food_window(QDialog):
                     "Bezahlt von:", person
                 )
                 #Calculate Negfative Price for API Request
-                negative_price = -abs(float(price))
+                negative_price = abs(float(price))
                 temp_name_pay_amount_list["price"] = negative_price
                 temp_name_pay_amount_list["paid_by"] = person
                 pay_list.append(temp_name_pay_amount_list)
@@ -186,6 +187,8 @@ class new_food_window(QDialog):
             if names.currentText():
                 temp_name_pay_amount_list = {}
                 person_name = self.eating_people_name_fields[index].currentText()
+                # Negative Price for API Request
+                price_per_person = -abs(price_per_person)
                 temp_name_pay_amount_list["price"] = price_per_person
                 temp_name_pay_amount_list["paid_by"] = person_name
                 pay_list.append(temp_name_pay_amount_list)
@@ -195,9 +198,10 @@ class new_food_window(QDialog):
                 return  # Stop calculation if any name is missing
 
 
-     
-        print("test")
-
+        # Send the pay_list to the API
+        print("Final Pay List to send to API:", pay_list)
+        response = add_new_food(pay_list)
+        print("API Response:", response)
 
 
 if __name__ == '__main__':
