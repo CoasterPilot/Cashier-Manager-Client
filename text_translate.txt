@@ -1,18 +1,23 @@
 [EN]
-button_open_edit_window = Change Value Window
-current_account_balance = Current Account Balance
+edit_balance_window_title = Change Account
+button_open_edit_window = Open Balance Window
+current_account_balance = Account Balance
 change_account_balance_window_title = Payment for
 text_how_much_do_you_want_to_pay = How much do you want to pay?
-reason_for_paying_text = Reason for Paying? (Optional)
+reason_for_paying_text = Reason for Payment? (Optional)
 pay_button_text = Pay
 close_button_text = Close
+button_open_add_food_window = Add New Food
+update_current_account_button = Update Balance
 
 [DE]
-button_open_edit_window = Wert ändern
-current_account_balance = Aktueller Kontostand
+edit_balance_window_title = Konto ändern
+button_open_edit_window = Kontostand öffnen
+current_account_balance = Kontostand
 change_account_balance_window_title = Bezahlvorgang für
 text_how_much_do_you_want_to_pay = Wie viel möchtest du bezahlen?
-reason_for_paying_text = Grund für Bezahlen? (Optional)
+reason_for_paying_text = Grund für die Zahlung? (Optional)
 pay_button_text = Bezahlen
 close_button_text = Schließen
-
+button_open_add_food_window = Neues Essen hinzufügen
+update_current_account_button = Kontostand aktualisieren

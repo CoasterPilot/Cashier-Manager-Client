@@ -30,14 +30,18 @@ def update_balance(account_id, value, reason, username_creator):
 
 # calculate Food Price
 
-def add_new_food(person_and_price_list):
+def add_new_food(person_and_price_list, username):
     authorization_token = read_config_value("config.txt", "API_Token")
     headers = {"Authorization": f"Bearer {authorization_token}"}
+    data = {
+        "person_and_price_list": person_and_price_list,
+        "username": username
+    }
     r = requests.post(
         f"{API_URL}/add_new_food",
-        json=person_and_price_list,
+        json=data,
         headers=headers,
-        timeout=999
+        timeout=5
     )
     r.raise_for_status()
     return r.json()
@@ -56,11 +60,4 @@ def get_account_data(userid):
         return {"error": str(e)}
 
 if __name__ == "__main__":
-    #accounts = get_accounts()
-    #print(accounts)
-    #account_data = get_account_data(userid="example_user_id")
-    #print(account_data)
-    #response = update_balance(account_id=1, value=500)
-    #print(response)
-
     add_new_food([{"name": "Test User", "price": 5.99}, {"name": "Test User 2", "price": 3.50}])

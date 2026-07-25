@@ -2,9 +2,12 @@ import sys
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
-    QPushButton
+    QPushButton,
+    QWidget,
+    QVBoxLayout
 )
 from functions import *
+
 
 
 def load_language_config(filename, language):
@@ -35,27 +38,43 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         # Show 
+        from globals import language
         global text_config
         text_config = load_language_config("text_translate.txt", language)
         self.button_edit_balance_text = text_config.get("button_open_edit_window", "Error Name for Pay Page")
         self.button_edit_balance = QPushButton(self.button_edit_balance_text)
         self.button_edit_balance.clicked.connect(self.show_edit_balanced_window)
+        self.button_add_food_text = text_config.get("button_open_add_food_window", "Error Name for Add Food Page")
+        self.button_add_food = QPushButton(self.button_add_food_text)
+        self.button_add_food.clicked.connect(self.show_add_food_window)
         self.button_logout = QPushButton("Logout (Deactivated)")
         #self.button_logout.clicked.connect()
-        self.setCentralWidget(self.button_edit_balance)
+        # Zentrales Widget erstellen
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+
+        # Vertikales Layout
+        layout = QVBoxLayout(central_widget)
+
+        # Buttons hinzufügen
+        layout.addWidget(self.button_edit_balance)
+        layout.addWidget(self.button_add_food)
         self.w = None
 
     #def show_edit_balanced_window(self, checked):
     def show_edit_balanced_window(self):
-        if self.w is None:
-            from edit_balanced_window import edit_balanced_window
-            self.w = edit_balanced_window()
+        from edit_balanced_window import edit_balanced_window
+        self.w = edit_balanced_window()
+        self.w.exec()
+
+    def show_add_food_window(self):
+        from new_food_window import new_food_window
+        self.w = new_food_window()
         self.w.exec()
 
 
 if __name__ == '__main__':
-    global language
-    language = read_config_value("config.txt", "Language")
+    
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()

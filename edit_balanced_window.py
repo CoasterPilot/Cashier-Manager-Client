@@ -1,25 +1,24 @@
 from PySide6.QtWidgets import (
     QDialog,
     QVBoxLayout,
-    QLabel,
     QApplication,
     QTableWidget,
     QTableWidgetItem,
-    QPushButton
+    QPushButton,
+    QHeaderView
 )
 import sys
 from main import load_language_config
 from api import get_accounts
+from PySide6.QtCore import Qt
 
-global text_config
-# Debugging delete After Usage
-language = "EN"
-text_config = load_language_config("text_translate.txt", language)
+from globals import language
 
 class edit_balanced_window(QDialog):
 
     def __init__(self):
         super().__init__()
+        text_config = load_language_config("text_translate.txt", language)
         # Api Request Results
         self.api_request = get_accounts()
         self.api_request_message = self.api_request.get("message", "Message Error")
@@ -33,12 +32,13 @@ class edit_balanced_window(QDialog):
             windowrange += user_height
         windowheight = standard_window_height + windowrange
         print(windowrange)
+        # Window Settings
+        window_title = text_config.get("edit_balance_window_title", "Error Name for Edit Balanced Window")
+        self.setWindowTitle(window_title)
         self.setGeometry(100, 100, 400, windowheight)
         
         layout = QVBoxLayout(self)
 
-        self.label = QLabel("Edit Balanced Window")
-        layout.addWidget(self.label)
 
         # Abfrage wie viele Konten vorhanden sind und diese in Tabelle anzeigen
         num_accounts = len(self.api_accounts)
@@ -51,6 +51,10 @@ class edit_balanced_window(QDialog):
         self.update_current_account_button_text = text_config.get("update_current_account_button", "Error Name for Update Current Account Button")
 
         self.table.setHorizontalHeaderLabels(["Name", self.name_current_account_Balance_text, self.update_current_account_button_text])
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.Stretch)          # Name
+        header.setSectionResizeMode(1, QHeaderView.ResizeToContents) # Kontostand
+        header.setSectionResizeMode(2, QHeaderView.Stretch)          # Update-Button
         #Setze Name für Benutuzer und Kontostand aus API Request
         
         for i in range(len(self.api_accounts)):
@@ -60,7 +64,9 @@ class edit_balanced_window(QDialog):
             self.table.setItem(i, 0, QTableWidgetItem(benutzername))
             #Kontostand abfragen
             kontostand = self.api_accounts[i][1]
-            self.table.setItem(i, 1, QTableWidgetItem(str(kontostand)))
+            item = QTableWidgetItem(str(kontostand))
+            item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+            self.table.setItem(i, 1, item)
             update_button = QPushButton(self.update_current_account_button_text)
             update_button.clicked.connect(lambda checked, userid=userid: self.open_change_balance_window(userid))  # Hier kannst du die Funktion zum Aktualisieren des Kontostands hinzufügen
             self.table.setCellWidget(i, 2, update_button)

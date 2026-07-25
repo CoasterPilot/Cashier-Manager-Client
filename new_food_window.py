@@ -9,12 +9,11 @@ from PySide6.QtWidgets import (
 )
 import sys
 from functions import get_users
-from PySide6.QtGui import QRegularExpressionValidator
-from PySide6.QtCore import QRegularExpression
 from functions import Text_Only_Float_Validator
 from api import add_new_food
-
+from globals import username
 float_validator = Text_Only_Float_Validator()
+
 
 class new_food_window(QDialog):
 
@@ -200,7 +199,7 @@ class new_food_window(QDialog):
 
         # Send the pay_list to the API
         print("Final Pay List to send to API:", pay_list)
-        response = add_new_food(pay_list)
+        response = add_new_food(pay_list, username)
         print("API Response:", response)
 
 
