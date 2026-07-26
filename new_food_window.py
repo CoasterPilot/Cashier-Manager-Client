@@ -12,8 +12,11 @@ from functions import get_users
 from functions import Text_Only_Float_Validator
 from api import add_new_food
 from globals import username
+from main import load_language_config
+from globals import language
 float_validator = Text_Only_Float_Validator()
 
+text_config = load_language_config("text_translate.txt", language)
 
 class new_food_window(QDialog):
 
@@ -21,14 +24,14 @@ class new_food_window(QDialog):
         super().__init__()
 
         # Window Init
-        self.setWindowTitle("New Food Window")
+        self.setWindowTitle(text_config.get("new_food_window_title", "Error Name for New Food Window"))
         self.setGeometry(100, 100, 400, 300)
 
         # MAIN LAYOUT
         self.layout = QVBoxLayout(self)
 
         # STATIC UI
-        self.label_amount_of_invoice = QLabel("Amount of Invoice")
+        self.label_amount_of_invoice = QLabel(text_config.get("new_food_window_title", "Error Name for New Food Window"))
         self.dropdown = QComboBox()
 
         for i in range(10):
@@ -71,11 +74,12 @@ class new_food_window(QDialog):
 
         # Generate Invoice Elements
         for number in range(int(text)):
-            label = QLabel(f"Invoice {number + 1}")
+            invoice_label = text_config.get("invoice_label", "Error Name for Invoice Label")
+            invoice_label = f"{invoice_label} {number + 1}"
+            label = QLabel(invoice_label)
             text_box = QLineEdit()
             text_box.setValidator(float_validator)
-            who_payd_the_invoice_label = QLabel("Who pay the Invoice?")
-        
+            who_payd_the_invoice_label = QLabel(text_config.get("who_payd_the_invoice_label", "Error Name for Who Paid the Invoice Label"))
             who_payd_the_invoice_text_box = QComboBox()
             #Change it to Users Via API Request
             for user in self.user_list:
@@ -103,9 +107,9 @@ class new_food_window(QDialog):
 
         # add Name of the Food
         if text != "0":
-            name_of_food_label = QLabel("Name of the Food")
+            name_of_food_label = QLabel(text_config.get("new_food_window_title", "Error Name for New Food Window"))
             self.name_of_food_text_box = QLineEdit()
-            Number_of_eating_people_label = QLabel("Number of Eating People")
+            Number_of_eating_people_label = QLabel(text_config.get("number_of_eating_people_label", "Error Name for Number of Eating People Label"))
             self.Number_of_eating_people_combobox = QComboBox()
             for i in range(10):
                 self.Number_of_eating_people_combobox.addItem(str(i))
@@ -130,7 +134,10 @@ class new_food_window(QDialog):
             element.deleteLater()
         self.created_name_fields_elements_list.clear()
         for number in range(int(number_of_people)):
-            name_of_eating_person_label = QLabel(f"Name of the Eating Person {number + 1}")
+            name_of_eating_person_label = text_config.get("name_of_eating_person_label", "Error Name for Name of Eating Person Label")
+            name_of_eating_person_label = f"{name_of_eating_person_label} {number + 1}"
+            name_of_eating_person_label = QLabel(name_of_eating_person_label)
+
             name_of_eating_person_text_box = QComboBox()
             for user in self.user_list:
                 name_of_eating_person_text_box.addItem(user)
@@ -143,7 +150,7 @@ class new_food_window(QDialog):
         # add calculate button
 
         if number_of_people != "0":
-            calculate_button = QPushButton("Calculate")
+            calculate_button = QPushButton(text_config.get("calculate_button_text", "Error Name for Calculate Button"))
             calculate_button.clicked.connect(self.calculate_price)
             self.created_name_fields_elements_list.append(calculate_button)
             self.content_layout.addWidget(calculate_button)

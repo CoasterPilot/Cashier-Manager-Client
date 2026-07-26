@@ -1,23 +1,35 @@
 [EN]
-edit_balance_window_title = Change Account
+edit_balance_window_title = Edit Account
 button_open_edit_window = Open Balance Window
 current_account_balance = Account Balance
 change_account_balance_window_title = Payment for
-text_how_much_do_you_want_to_pay = How much do you want to pay?
-reason_for_paying_text = Reason for Payment? (Optional)
+text_how_much_do_you_want_to_pay = How much would you like to pay?
+reason_for_paying_text = Payment Reason (Optional)
 pay_button_text = Pay
 close_button_text = Close
 button_open_add_food_window = Add New Food
 update_current_account_button = Update Balance
+new_food_window_title = Add New Food
+who_paid_the_invoice_label = Who paid the bill?
+number_of_eating_people_label = Number of People
+calculate_button_text = Calculate
+name_of_eating_person_label = Person's Name
+invoice_label = Bill Payer
 
 [DE]
-edit_balance_window_title = Konto ändern
+edit_balance_window_title = Konto bearbeiten
 button_open_edit_window = Kontostand öffnen
 current_account_balance = Kontostand
-change_account_balance_window_title = Bezahlvorgang für
+change_account_balance_window_title = Zahlung für
 text_how_much_do_you_want_to_pay = Wie viel möchtest du bezahlen?
-reason_for_paying_text = Grund für die Zahlung? (Optional)
+reason_for_paying_text = Zahlungsgrund (optional)
 pay_button_text = Bezahlen
 close_button_text = Schließen
 button_open_add_food_window = Neues Essen hinzufügen
 update_current_account_button = Kontostand aktualisieren
+new_food_window_title = Neues Essen hinzufügen
+who_paid_the_invoice_label = Wer hat die Rechnung bezahlt?
+number_of_eating_people_label = Anzahl der Personen
+calculate_button_text = Berechnen
+name_of_eating_person_label = Name der Person
+invoice_label = Rechnung bezahlt von
